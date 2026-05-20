@@ -31,6 +31,11 @@ async function main() {
 
 }
 
+var corsOptions = {
+    origin: ['https://nspl.vercel.app/', 'http://localhost:3000/'],
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
 // middlewheare:
 app.use(express.json())
 app.use(cors());
@@ -287,6 +292,30 @@ app.get("/teacgergetdata", async (req, res) => {
 })
 
 
+// teacher Update-----------------------
+app.post("/teacherupdate/:id", async (req, res) => {
+
+    const teacherupdate = await Teacher.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {
+             returnDocument: "after"
+        }
+    );
+    res.json({ message: "success", user: teacherupdate })
+
+})
+// delet techer -----------------------------------
+app.delete("/deleteteacher/:id", async (req, res) => {
+    console.log("delete", req.params);
+    const id = req.params.id;
+    const delTeacher = await Teacher.deleteOne({ _id: id });
+    console.log(delTeacher);
+    res.json({ message: "Success", status: true });
+
+})
+
+
 
 
 
@@ -299,7 +328,7 @@ app.get("/teacgergetdata", async (req, res) => {
 
 // to check a server
 app.get("", (req, res) => {
-    res.json({ massage: "Hello" })
+    res.json({ message: "Hello" })
 })
 
 app.listen(8000, () => {
