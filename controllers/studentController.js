@@ -1,16 +1,17 @@
 const express = require("express");
 const Student = require("../models/studentModel");
+const fs = require("fs");
 
 const postStudent = async (req, res) => {
     console.log(req.body);
     console.log(req.file);
     try {
-        const { date, category, state, firstname, lastname, fathername, roll_no, address, mobailno, course, email, courseduration, gender, mothername } = req.body;
+        const { date, category, state, firstname, lastname, fathername, roll_no, address, mobailno, course, email, courseduration, gender} = req.body;
         const createstuuser = new Student({
             firstname: firstname,
             lastname: lastname,
             fathername: fathername,
-            mothername: mothername,
+            // mothername: mothername,
             roll_no: roll_no,
             mobailno: mobailno,
             email: email,
@@ -21,10 +22,14 @@ const postStudent = async (req, res) => {
             date: date,
             address: address,
             gender: gender,
-            image: {
+            // image: {
+            //     data: fs.readFileSync("uploads/" + req.file.filename),
+            //     ContentType: "uploads/",
+            // }
+            image: req.file ?  {
                 data: fs.readFileSync("uploads/" + req.file.filename),
                 ContentType: "uploads/",
-            }
+            }: null
 
         })
 
@@ -40,7 +45,10 @@ const postStudent = async (req, res) => {
         }
     }
     catch (error) {
+        console.log(error);
         res.json({ error: error, message: "Error in student form" });
+
+        // res.json({ error: error, message: "Error in student form" });
     }
 }
 

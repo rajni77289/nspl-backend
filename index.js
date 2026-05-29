@@ -3,9 +3,12 @@ const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
 const multer = require("multer")
-const fs = require('fs');
+// const fs = require('fs');
 const path = require('path');
+const { type } = require('os');
+const { create } = require('./models/studentModel');
 // const Student = require('./models/studentModel');
+require('dotenv').config()
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -45,7 +48,7 @@ app.use(cors());
 // user Router:-
 app.use("", require("./routers/userRouter"));
 // Student Router:-
-app.use("", require("./routers/studentRouter"));
+app.use("", upload.single('image'), require("./routers/studentRouter"));
 
 
 
@@ -106,12 +109,11 @@ app.use("", require("./routers/studentRouter"));
 //     console.log(req.body);
 //     console.log(req.file);
 //     try {
-//         const { date, category, state, firstname, lastname, fathername, roll_no, address, mobailno, course, email, courseduration, gender, mothername } = req.body;
+//         const { date, category, state, firstname, lastname, fathername, roll_no, address, mobailno, course, email, courseduration, gender } = req.body;
 //         const createstuuser = new Student({
 //             firstname: firstname,
 //             lastname: lastname,
 //             fathername: fathername,
-//             mothername: mothername,
 //             roll_no: roll_no,
 //             mobailno: mobailno,
 //             email: email,
@@ -125,6 +127,7 @@ app.use("", require("./routers/studentRouter"));
 //             image: {
 //                 data: fs.readFileSync("uploads/" + req.file.filename),
 //                 ContentType: "uploads/",
+
 //             }
 
 //         })
@@ -170,9 +173,9 @@ app.use("", require("./routers/studentRouter"));
 
 // })
 
-// registation page:-
-// app.post("/updatestudent"),async(req,res)=>{
-// }
+// // registation page:-
+// // app.post("/updatestudent"),async(req,res)=>{
+// // }
 
 // app.post("/updatestudent/:id", async (req, res) => {
 
@@ -233,8 +236,6 @@ const Teacher = mongoose.model("Teacher", techschema);
 app.post('/teacherdata', upload.single('image'), async (req, res) => {
     console.log(req.body);
     //console.log(req.file);
-
-
     try {
 
 
@@ -340,22 +341,6 @@ const Attendanceschema = new mongoose.Schema({
 // create model:
 const Attendance = mongoose.model("Attendance", Attendanceschema);
 
-
-// app.post("/attendancedata", (req, res) => {
-//     console.log(req.body);
-
-//     const {name,present,absent,monthlyattenreport,totalpercentage,Serialno} = req.body;
-
-//     const saveAttendance = new Attendance({
-//         Serialno:Serialno,
-//         name:name,
-//         present:present,
-//         absent:absent,
-//         monthlyattenreport:monthlyattenreport,
-//         totalpercentage:totalpercentage
-//     })
-
-// })
 app.post("/attendancedata", async (req, res) => {
     console.log(req.body);
 
@@ -400,6 +385,54 @@ app.get("/getattendance", async (req, res) => {
 })
 
 
+// ***************** Notification  *************
+// const notificationschema=new mongoose.Schema({
+//     message:{
+//         type:String
+//     },
+//     createdAt:{
+//         type:Date,
+//         default:Date.now,
+//     }
+// })
+// const notification=mongoose.model("Notification",notificationschema)
+// post notification:-
+// app.post("/notifications", async (req, res) => {
+
+//    try {
+
+//       const data = await Notification.create({
+//          message: req.body.message
+//       })
+
+//       res.status(200).json({
+//          message: "Notification created",
+//          data
+//       })
+
+//    } catch (error) {
+
+//       res.status(500).json({
+//          message: "Error creating notification",
+//          error: error.message
+//       })
+
+//    }
+
+// })
+// get notifications:-
+// app.get("/notifications", async (req, res) => {
+//    try {
+
+//       const fetchnotification = await notification.find({})
+
+//       res.status(200).json({
+//          message: "Success", status: true, user: fetchnotification})
+
+//    } catch (error) {
+//       res.status(500).json({ message: "Error in Fetch Notification", error: error.message})
+//    }
+// })
 
 
 

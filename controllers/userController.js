@@ -1,5 +1,7 @@
 const express = require("express");
 const User = require("../models/userModel")
+const jwt = require('jsonwebtoken');
+
 
 // create Api:- User
 const signupUser = async (req, res) => {
@@ -13,10 +15,10 @@ const signupUser = async (req, res) => {
             username: username,
             email: email,
             password: password,
-            phoneno: phoneno,
-            datebirth: datebirth,
-            bio: bio,
-            state: state,
+            // phoneno: phoneno,
+            // datebirth: datebirth,
+            // bio: bio,
+            // state: state,
             // city: city,
             // imagedata: fs.readFileSync("uploads/" + req.file.filename),
             //     ContentType: "uploads/",
@@ -33,9 +35,11 @@ const signupUser = async (req, res) => {
         const saveuser = await createusers.save();
 
         if (saveuser) {
+            let token;
+            token = jwt.sign({ _id: saveuser._id }, process.env.JWT_SECRET_KEY, { expiresIn: "7d", });
             res
                 .status(200)
-                .json({ message: "success", status: true, user: saveuser });
+                .json({ message: "success", status: true, user: saveuser, token: token });
         }
         else {
             res.status(500).json({ message: "error", status: false });
@@ -62,8 +66,12 @@ const loginUser = async (req, res) => {
         if (existUser.password !== password) {
             res.status(200).json({ message: "failed", status: false });
         }
+        // let token;
+        // token = jwt.sign({ _id: existUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: "7d", });
+        // console.log(existUser);
+        // console.log(process.env.JWT_SECRET_KEY);
 
-        res.status(200).json({ message: "success", status: true, user: existUser });
+        res.status(200).json({ message: "success", status: true, user: existUser});
 
     } catch (error) {
         res.json({ error: error, message: "Error in signup" })
