@@ -33,10 +33,12 @@ const signupUser = async (req, res) => {
         });
         // save data:-
         const saveuser = await createusers.save();
+        console.log("USER SAVED:", saveuser);
 
         if (saveuser) {
             let token;
             token = jwt.sign({ _id: saveuser._id }, process.env.JWT_SECRET_KEY, { expiresIn: "7d", });
+            console.log("TOKEN:", token);
             res
                 .status(200)
                 .json({ message: "success", status: true, user: saveuser, token: token });
@@ -46,6 +48,7 @@ const signupUser = async (req, res) => {
         }
     }
     catch (error) {
+        console.log(error);
         res.json({ error: error, message: "Error in signup" })
     }
 
@@ -66,12 +69,9 @@ const loginUser = async (req, res) => {
         if (existUser.password !== password) {
             res.status(200).json({ message: "failed", status: false });
         }
-        // let token;
-        // token = jwt.sign({ _id: existUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: "7d", });
-        // console.log(existUser);
-        // console.log(process.env.JWT_SECRET_KEY);
-
-        res.status(200).json({ message: "success", status: true, user: existUser});
+        let token;
+        token = jwt.sign({ _id: existUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: "7d", });
+        res.status(200).json({ message: "success", status: true, user: existUser, token: token });
 
     } catch (error) {
         res.json({ error: error, message: "Error in signup" })
