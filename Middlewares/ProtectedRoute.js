@@ -33,31 +33,3 @@ const protectRoute = async (req, res, next) => {
 };
 
 module.exports = { protectRoute };
-
-
-// const protectRoute = async (req, res, next) => {
-// console.log("Authorization Header:", req.headers.authorization);
-
-
-//   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-//     return res.status(401).json({
-//       status: false,
-//       msg: "Token missing",
-//     });
-//   }
-
-//   const token = authHeader.split(" ")[1];
-
-//   jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, decoded) => {
-//     if (err) {
-//       return res.status(401).json({
-//         status: false,
-//         msg: "Invalid token",
-//       });
-//     }
-
-//     const user = await Users.findById(decoded._id);
-//     req.user = user;
-//     next();
-//   });
-// };
