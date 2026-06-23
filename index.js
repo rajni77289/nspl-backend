@@ -26,7 +26,7 @@ const upload = multer({
 
 main().catch((err) => console.log(err));
 async function main() {
-    await mongoose.connect("mongodb+srv://Rajni:Rajni77@cluster0.ux7cbp9.mongodb.net/?appName=Cluster0");
+    await mongoose.connect("mongodb+srv://Rajni:Rajni77@cluster0.ux7cbp9.mongodb.net/AdminPanel?appName=Cluster0");
     console.log("Database Connected")
 
 }
